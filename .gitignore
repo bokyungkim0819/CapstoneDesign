@@ -1,0 +1,22 @@
+# Python cache / virtual environments
+__pycache__/
+*.py[cod]
+.Python
+.venv/
+venv/
+env/
+
+# Local environment / secrets
+.env
+.env.*
+
+# IDE / OS files
+.DS_Store
+Thumbs.db
+
+# Project dataset and generated outputs
+project/data/raw/
+project/outputs/
+
+# Optional large artifacts
+*.log
