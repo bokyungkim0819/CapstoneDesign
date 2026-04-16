@@ -1,7 +1,7 @@
-# AI 기반 산업 설비 진동 FFT 분석 (중간 점검 버전)
+# AI 기반 산업 설비 진동 FFT 분석 (중간 점검)
 
 이 프로젝트는 **AI Hub 기계시설물 고장 예지 센서 데이터셋** 중 `vibration` 데이터만 사용하여,
-다음 파이프라인을 수행합니다.
+다음 파이프라인을 수행함
 
 - 데이터셋 폴더 구조 점검
 - CSV 로드 및 특정 진동 컬럼 추출
@@ -11,7 +11,7 @@
 - 특징 CSV 누적 저장(추후 머신러닝 입력으로 사용 가능)
 - 시간영역/주파수영역 그래프 저장
 
-> 현재 버전은 **FFT + 특징 추출까지** 구현되어 있으며, 머신러닝/분류/예측 코드는 포함하지 않습니다.
+> 현재 버전은 FFT + 특징 추출까지 구현되어 있으며, 머신러닝/분류/예측 코드는 아직 미포함
 
 ---
 
@@ -53,19 +53,19 @@ pip install -r requirements.txt
 
 ## 3) 데이터 준비
 
-AI Hub에서 받은 진동 CSV 파일을 아래 경로에 배치하세요.
+AI Hub에서 받은 진동 CSV 파일을 아래 경로에 배치하기
 
 ```text
 project/data/raw/vibration/
 ```
 
-현재 구현은 `vibration` 경로만 처리하도록 제한되어 있습니다.
+(현재 구현은 `vibration` 경로만 처리하도록 제한되어 있음)
 
 ---
 
 ## 4) 실행 방법
 
-아래 예시는 `project/src` 폴더에서 실행한다고 가정합니다.
+아래 예시는 `project/src` 폴더에서 실행한다고 가정함.
 
 ```bash
 cd src
@@ -139,7 +139,7 @@ python main.py --folder ../data/raw/vibration --column acc_x --auto-fs --no-plot
 
 ## 6) 예외 처리(주요)
 
-다음 케이스에 대해 명확한 오류 메시지를 출력합니다.
+다음 케이스에 대해 오류 메시지를 출력함.
 
 - 빈 CSV 파일
 - 잘못된 파일 경로
@@ -150,9 +150,9 @@ python main.py --folder ../data/raw/vibration --column acc_x --auto-fs --no-plot
 
 ---
 
-## 7) 향후 확장 계획
+## 7) 확장 계획
 
-현재 코드는 향후 머신러닝 기반 상태 진단으로 확장하기 쉽도록 모듈화되어 있습니다.
+향후 머신러닝 기반 상태 진단으로 확장하기 쉽도록 모듈화되어 있음.
 
 - `data_loader.py` / `preprocess.py`: 학습용 입력 생성 단계로 확장 가능
 - `fft_analysis.py` + `feature_extraction.py`: 주파수 특징량 확장 가능
