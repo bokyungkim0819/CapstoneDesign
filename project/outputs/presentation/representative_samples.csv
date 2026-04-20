@@ -1,0 +1,5 @@
+﻿label,file_path,rms,peak_abs,dominant_freq_hz,label_ascii
+정상,..\data\raw\vibration\11kW\R-CAHU-02R\정상\STFMK-20201105-LW17-8319_20201127_102917_004.csv,0.0083805792711297,0.03288378951284,60.0,normal
+축정렬불량,..\data\raw\vibration\5.5kW\R-SF-01\축정렬불량\STFMK-20201105-LW19-3047_20201223_111547_004.csv,0.0103434730673494,0.04200636162998,162.4,misalignment
+베어링불량,..\data\raw\vibration\5.5kW\L-SF-02\베어링불량\STFMK-20201105-LW19-1944_20201223_095718_004.csv,0.0652573429120527,1.04825004174932,108.0,bearing_fault
+회전체불평형,..\data\raw\vibration\15kW\L-CAHU-01S\회전체불평형\STFMK-20201105-LW14-9624_20201128_091928_004.csv,0.0166438939324133,0.06538377574608,60.0,unbalance
