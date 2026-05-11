@@ -1,0 +1,16 @@
+rms
+peak_abs
+dominant_freq_hz
+dominant_amp
+top1_freq_hz
+top1_amp
+top2_freq_hz
+top2_amp
+top3_freq_hz
+top3_amp
+energy_0_10Hz
+energy_10_30Hz
+energy_30_60Hz
+energy_60_120Hz
+energy_120_250Hz
+energy_250_500Hz

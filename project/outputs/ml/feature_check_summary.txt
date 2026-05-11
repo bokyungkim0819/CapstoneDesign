@@ -1,0 +1,15 @@
+[feature 누수 점검 요약]
+- exclude_meta 기본값 사용 여부: True
+- 전체 원본 컬럼 수: 21
+- 학습 사용 feature 수: 16
+- 학습 제외 컬럼 수: 5
+- object 타입 컬럼 목록: ['file_path', 'column', 'label']
+- 의심 컬럼(feature 내부) 발견 수: 0
+- 의심 컬럼 목록: []
+
+[필수 제외 컬럼 포함 여부]
+- label in features: False
+- file_path in features: False
+- column in features: False
+- fs_hz in features: False
+- samples in features: False

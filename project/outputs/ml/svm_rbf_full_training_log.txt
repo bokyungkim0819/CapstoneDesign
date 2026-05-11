@@ -1,0 +1,6 @@
+[SVM 학습 완료]
+task=multiclass
+kernel=rbf
+started_at=2026-05-11T13:15:57.272823
+ended_at=2026-05-11T13:21:59.107971
+elapsed_seconds=361.83

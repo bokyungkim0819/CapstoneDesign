@@ -1,0 +1,48 @@
+[라벨 검증 요약]
+- 전체 데이터 개수: 126712
+- 라벨 컬럼명: label
+- 라벨 스타일 추정: korean
+
+[라벨별 샘플 수/비율]
+- 정상: 57874개 (45.67%)
+- 벨트느슨함: 20698개 (16.33%)
+- 축정렬불량: 17677개 (13.95%)
+- 베어링불량: 16968개 (13.39%)
+- 회전체불평형: 13495개 (10.65%)
+
+[라벨별 file_path 샘플(최대 5개)]
+
+<정상>
+- ..\data\raw\vibration\11kW\L-CAHU-01R\정상\STFMK-20201105-LW19-1935_20201125_141239_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\정상\STFMK-20201105-LW19-1935_20201125_141248_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\정상\STFMK-20201105-LW19-1935_20201125_141251_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\정상\STFMK-20201105-LW19-1935_20201125_141257_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\정상\STFMK-20201105-LW19-1935_20201125_141724_004.csv | 매핑검증: 일치
+
+<벨트느슨함>
+- ..\data\raw\vibration\11kW\R-CAHU-01R\벨트느슨함\STFMK-20201105-LW17-8127_20201128_092954_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-01R\벨트느슨함\STFMK-20201105-LW17-8127_20201128_093015_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-01R\벨트느슨함\STFMK-20201105-LW17-8127_20201128_093018_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-01R\벨트느슨함\STFMK-20201105-LW17-8127_20201128_093021_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-01R\벨트느슨함\STFMK-20201105-LW17-8127_20201128_093024_004.csv | 매핑검증: 일치
+
+<축정렬불량>
+- ..\data\raw\vibration\11kW\L-CAHU-01R\축정렬불량\STFMK-20201105-LW19-1935_20201202_123911_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\축정렬불량\STFMK-20201105-LW19-1935_20201202_123914_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\축정렬불량\STFMK-20201105-LW19-1935_20201202_123917_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\축정렬불량\STFMK-20201105-LW19-1935_20201202_123920_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\축정렬불량\STFMK-20201105-LW19-1935_20201202_123923_004.csv | 매핑검증: 일치
+
+<베어링불량>
+- ..\data\raw\vibration\11kW\R-CAHU-02R\베어링불량\STFMK-20201105-LW19-2282_20201221_112446_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-02R\베어링불량\STFMK-20201105-LW19-2282_20201221_112449_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-02R\베어링불량\STFMK-20201105-LW19-2282_20201221_112452_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-02R\베어링불량\STFMK-20201105-LW19-2282_20201221_112455_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\R-CAHU-02R\베어링불량\STFMK-20201105-LW19-2282_20201221_112458_004.csv | 매핑검증: 일치
+
+<회전체불평형>
+- ..\data\raw\vibration\11kW\L-CAHU-01R\회전체불평형\STFMK-20201105-LW19-2328_20201201_064204_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\회전체불평형\STFMK-20201105-LW19-2328_20201201_064207_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\회전체불평형\STFMK-20201105-LW19-2328_20201201_064210_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\회전체불평형\STFMK-20201105-LW19-2328_20201201_064213_004.csv | 매핑검증: 일치
+- ..\data\raw\vibration\11kW\L-CAHU-01R\회전체불평형\STFMK-20201105-LW19-2328_20201201_064216_004.csv | 매핑검증: 일치

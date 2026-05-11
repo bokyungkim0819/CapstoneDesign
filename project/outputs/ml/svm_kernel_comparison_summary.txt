@@ -1,0 +1,37 @@
+[SVM 커널 비교 요약]
+- task: multiclass
+
+[linear SVM 성능]
+- accuracy: 0.510003
+- precision_macro: 0.549795
+- recall_macro: 0.519729
+- f1_macro: 0.524754
+- precision_weighted: 0.542062
+- recall_weighted: 0.510003
+- f1_weighted: 0.518374
+
+[RBF SVM 성능]
+- accuracy: 0.657420
+- precision_macro: 0.716029
+- recall_macro: 0.589073
+- f1_macro: 0.627255
+- precision_weighted: 0.666253
+- recall_weighted: 0.657420
+- f1_weighted: 0.637394
+
+[성능 차이: RBF - linear]
+- accuracy: 0.147417
+- precision_macro: 0.166235
+- recall_macro: 0.069345
+- f1_macro: 0.102501
+- precision_weighted: 0.124191
+- recall_weighted: 0.147417
+- f1_weighted: 0.119020
+
+[학습 시간 비교]
+- RBF SVM 학습 시간(초): 361.83
+- linear SVM 학습 시간(초): 기록 없음
+- 학습 시간 차이: 계산 불가
+
+[해석]
+- Random Forest가 SVM 대비 일관되게 높은 성능을 보이며, 현 단계에서는 최종 운영 모델로 Random Forest를 유지하는 것이 합리적이다.

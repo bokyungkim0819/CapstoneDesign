@@ -1,0 +1,22 @@
+[train/test split 검증]
+- 전체 데이터 개수: 126712
+- train 데이터 개수: 101369
+- test 데이터 개수: 25343
+- test_size: 0.2
+- random_state: 42
+- split 모드: stratified_random_split
+- stratify 적용 여부: True
+
+[train label 분포]
+- 정상: 46299
+- 벨트느슨함: 16558
+- 축정렬불량: 14142
+- 베어링불량: 13574
+- 회전체불평형: 10796
+
+[test label 분포]
+- 정상: 11575
+- 벨트느슨함: 4140
+- 축정렬불량: 3535
+- 베어링불량: 3394
+- 회전체불평형: 2699

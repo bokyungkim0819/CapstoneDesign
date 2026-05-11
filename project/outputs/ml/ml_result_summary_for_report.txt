@@ -1,0 +1,37 @@
+[머신러닝 결과 요약(보고서용)]
+1) 사용 데이터
+- AI Hub 기계시설물 고장 예지 센서 데이터셋 vibration 데이터
+- 사용 feature CSV: ..\outputs\features\features_all_labeled.csv
+
+2) 사용 feature
+- feature 개수: 16
+- feature 목록: rms, peak_abs, dominant_freq_hz, dominant_amp, top1_freq_hz, top1_amp, top2_freq_hz, top2_amp, top3_freq_hz, top3_amp, energy_0_10Hz, energy_10_30Hz, energy_30_60Hz, energy_60_120Hz, energy_120_250Hz, energy_250_500Hz
+
+3) label별 샘플 수
+- 정상: 57874개 (45.67%)
+- 벨트느슨함: 20698개 (16.33%)
+- 축정렬불량: 17677개 (13.95%)
+- 베어링불량: 16968개 (13.39%)
+- 회전체불평형: 13495개 (10.65%)
+
+4) train/test split 비율
+- test_size: 0.2
+
+5) 모델별 성능 비교
+- svm_rbf: accuracy=0.6574, f1_macro=0.6273
+
+6) 최종 선택 모델: svm_rbf
+
+7) Random Forest feature importance 상위 10개
+- Random Forest를 학습하지 않아 중요도 정보가 없습니다.
+
+8) SVM 성능 해석
+- 대용량/다중 클래스 분포에서 선형 경계가 충분히 복잡한 패턴을 표현하지 못해 Random Forest/MLP 대비 성능이 낮아질 수 있다.
+
+9) Random Forest 고성능 해석 시 주의점
+- 현재 결과는 랜덤 split 기준이며, 같은 설비/유사 시점 데이터가 train/test에 동시에 포함되었을 가능성이 있다. group split 검증으로 과대평가 여부를 추가 확인해야 한다.
+
+10) 보고서용 문장 3개
+- FFT 기반 특징값을 활용하여 정상 및 고장 유형 분류 모델을 구축하였다.
+- Random Forest가 가장 높은 성능을 보였으며, RMS, peak, dominant frequency, 주파수 대역 에너지 등이 주요 특징으로 활용되었다.
+- 향후 로봇이 수집한 진동 데이터에도 동일한 전처리 및 특징 추출 파이프라인을 적용하여 실시간 상태 진단으로 확장할 수 있다.
