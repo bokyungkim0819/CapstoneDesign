@@ -1,0 +1,2 @@
+﻿task,split_mode,train_samples,test_samples,feature_count,accuracy,precision_macro,recall_macro,f1_macro,f1_weighted
+multiclass,stratified_random_split,101369,25343,50,0.996606558023912,0.9960845527802953,0.9966008727229647,0.9963419571640891,0.9966080261779918

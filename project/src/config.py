@@ -9,6 +9,7 @@ TIME_PLOTS_DIR: Path = OUTPUT_DIR / "time_plots"
 FFT_PLOTS_DIR: Path = OUTPUT_DIR / "fft_plots"
 LOG_DIR: Path = OUTPUT_DIR / "logs"
 FEATURES_DIR: Path = OUTPUT_DIR / "features"
+WAVELET_PLOTS_DIR: Path = OUTPUT_DIR / "wavelet_plots"
 
 DEFAULT_FS: float = 1000.0
 
@@ -33,3 +34,4 @@ def ensure_output_directories() -> None:
     FFT_PLOTS_DIR.mkdir(parents=True, exist_ok=True)
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     FEATURES_DIR.mkdir(parents=True, exist_ok=True)
+    WAVELET_PLOTS_DIR.mkdir(parents=True, exist_ok=True)
