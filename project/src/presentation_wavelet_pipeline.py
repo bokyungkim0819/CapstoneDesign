@@ -18,6 +18,10 @@ from wavelet_analysis import (
     DEFAULT_CWT_WAVELET,
     DEFAULT_DWT_LEVEL,
     DEFAULT_DWT_WAVELET,
+    compute_dwt_coefficients,
+    compute_global_wavelet_spectrum,
+    dwt_frequency_ranges,
+    reconstruct_dwt_subbands,
     save_cwt_scalogram,
     save_wavelet_energy_plot,
 )
@@ -104,6 +108,175 @@ def save_comparison_scalogram(
     plt.close(fig)
 
 
+def save_global_spectrum_comparison(
+    samples: list[dict[str, object]],
+    output_path: Path,
+    wavelet: str = DEFAULT_CWT_WAVELET,
+) -> None:
+    """FFT spectrum에 대응하는 정상/불량 Global Wavelet Spectrum을 저장한다."""
+    spectra: list[tuple[np.ndarray, np.ndarray]] = []
+    reference_power = 0.0
+    for item in samples:
+        frequencies, mean_power = compute_global_wavelet_spectrum(
+            np.asarray(item["signal"], dtype=float),
+            float(item["fs"]),
+            wavelet=wavelet,
+        )
+        spectra.append((frequencies, mean_power))
+        reference_power = max(reference_power, float(np.max(mean_power)))
+
+    reference_power = max(reference_power, np.finfo(float).tiny)
+    colors = ["#2E7D32", "#C62828", "#3569A8", "#7B1FA2"]
+    fig, ax = plt.subplots(figsize=(11, 5.5))
+    for color, item, (frequencies, mean_power) in zip(
+        colors,
+        samples,
+        spectra,
+        strict=False,
+    ):
+        relative_power_db = 10.0 * np.log10(
+            mean_power / reference_power + 1e-12
+        )
+        ax.semilogx(
+            frequencies,
+            relative_power_db,
+            linewidth=2.0,
+            color=color,
+            label=str(item["title"]),
+        )
+
+    ax.set_title(
+        "Global Wavelet Spectrum: Normal vs Fault",
+        fontsize=14,
+        fontweight="bold",
+    )
+    ax.set_xlabel("Frequency (Hz)")
+    ax.set_ylabel("Time-averaged CWT power (dB, shared reference)")
+    ax.grid(True, which="both", alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, dpi=180, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
+def save_dwt_energy_comparison(
+    samples: list[dict[str, object]],
+    output_path: Path,
+    wavelet: str = DEFAULT_DWT_WAVELET,
+    level: int = DEFAULT_DWT_LEVEL,
+) -> None:
+    """정상/불량 DWT 대역별 상대 에너지를 그룹 막대그래프로 저장한다."""
+    if not samples:
+        raise ValueError("[오류] DWT 에너지 비교용 샘플이 없습니다.")
+
+    first_fs = float(samples[0]["fs"])
+    ranges = dwt_frequency_ranges(first_fs, level)
+    band_names = list(
+        compute_dwt_coefficients(
+            np.asarray(samples[0]["signal"], dtype=float),
+            wavelet=wavelet,
+            level=level,
+        )
+    )
+    labels = [
+        f"{name}\n{ranges[name][0]:.0f}-{ranges[name][1]:.0f} Hz"
+        for name in band_names
+    ]
+    x_positions = np.arange(len(band_names), dtype=float)
+    bar_width = 0.36
+    colors = ["#2E7D32", "#C62828", "#3569A8", "#7B1FA2"]
+
+    fig, ax = plt.subplots(figsize=(12, 5.5))
+    for sample_index, (color, item) in enumerate(
+        zip(colors, samples, strict=False)
+    ):
+        coeffs = compute_dwt_coefficients(
+            np.asarray(item["signal"], dtype=float),
+            wavelet=wavelet,
+            level=level,
+        )
+        energies = np.asarray(
+            [np.sum(np.square(coeffs[name])) for name in band_names],
+            dtype=float,
+        )
+        ratios = energies / np.sum(energies) * 100.0
+        offset = (sample_index - (len(samples) - 1) / 2.0) * bar_width
+        bars = ax.bar(
+            x_positions + offset,
+            ratios,
+            width=bar_width,
+            color=color,
+            label=str(item["title"]),
+        )
+        ax.bar_label(bars, fmt="%.1f", padding=2, fontsize=8)
+
+    ax.set_title(
+        "DWT Sub-band Energy Comparison: Normal vs Fault",
+        fontsize=14,
+        fontweight="bold",
+    )
+    ax.set_xticks(x_positions, labels)
+    ax.set_xlabel("Wavelet sub-band")
+    ax.set_ylabel("Relative energy (%)")
+    ax.grid(axis="y", alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, dpi=180, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
+def save_dwt_decomposition_plot(
+    signal: np.ndarray,
+    fs: float,
+    output_path: Path,
+    title: str,
+    wavelet: str = DEFAULT_DWT_WAVELET,
+    level: int = DEFAULT_DWT_LEVEL,
+) -> None:
+    """원신호와 A5/D5~D1 복원 성분을 동일 시간축의 적층 그래프로 저장한다."""
+    values = np.asarray(signal, dtype=float)
+    components = reconstruct_dwt_subbands(
+        values,
+        wavelet=wavelet,
+        level=level,
+    )
+    ranges = dwt_frequency_ranges(fs, level)
+    time_axis = np.arange(values.size, dtype=float) / fs
+    rows = 1 + len(components)
+    fig, axes = plt.subplots(
+        rows,
+        1,
+        figsize=(12, 1.55 * rows),
+        sharex=True,
+    )
+
+    axes[0].plot(time_axis, values, color="#333333", linewidth=0.7)
+    axes[0].set_ylabel("Signal")
+    axes[0].grid(alpha=0.2)
+    for ax, (band_name, component) in zip(
+        axes[1:],
+        components.items(),
+        strict=True,
+    ):
+        low, high = ranges[band_name]
+        ax.plot(time_axis, component, linewidth=0.7, color="#3569A8")
+        ax.set_ylabel(f"{band_name}\n{low:.0f}-{high:.0f} Hz")
+        ax.grid(alpha=0.2)
+
+    axes[-1].set_xlabel("Time (s)")
+    fig.suptitle(
+        f"DWT Reconstructed Sub-band Signals - {title}",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout(rect=(0, 0, 1, 0.97))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, dpi=180, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     normal_file, fault_file = find_sample_files(None, None)
@@ -128,6 +301,7 @@ def main() -> None:
 
         scalogram_path = OUT_DIR / f"{tag}_wavelet_scalogram.png"
         energy_path = OUT_DIR / f"{tag}_wavelet_energy.png"
+        decomposition_path = OUT_DIR / f"{tag}_dwt_decomposition.png"
         save_cwt_scalogram(
             signal,
             fs,
@@ -142,16 +316,29 @@ def main() -> None:
             level=DEFAULT_DWT_LEVEL,
             title=f"DWT Sub-band Energy - {title}",
         )
+        save_dwt_decomposition_plot(
+            signal,
+            fs,
+            decomposition_path,
+            title=title,
+        )
         comparison_samples.append(
             {"signal": signal, "fs": fs, "title": title, "features": row}
         )
         print(f"[{sample_name}]")
         print(f"- Scalogram: {scalogram_path}")
         print(f"- DWT energy: {energy_path}")
+        print(f"- DWT decomposition: {decomposition_path}")
 
     comparison_path = OUT_DIR / "normal_fault_wavelet_comparison.png"
     save_comparison_scalogram(comparison_samples, comparison_path)
-    print(f"[완료] Comparison: {comparison_path}")
+    spectrum_path = OUT_DIR / "normal_fault_global_wavelet_spectrum.png"
+    save_global_spectrum_comparison(comparison_samples, spectrum_path)
+    energy_comparison_path = OUT_DIR / "normal_fault_dwt_energy_comparison.png"
+    save_dwt_energy_comparison(comparison_samples, energy_comparison_path)
+    print(f"[완료] Scalogram comparison: {comparison_path}")
+    print(f"[완료] Global spectrum: {spectrum_path}")
+    print(f"[완료] Energy comparison: {energy_comparison_path}")
 
 
 if __name__ == "__main__":

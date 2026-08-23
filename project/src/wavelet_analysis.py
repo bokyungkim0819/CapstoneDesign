@@ -142,6 +142,75 @@ def dwt_frequency_ranges(fs: float, level: int) -> dict[str, tuple[float, float]
     return ranges
 
 
+def reconstruct_dwt_subbands(
+    signal: np.ndarray,
+    wavelet: str = DEFAULT_DWT_WAVELET,
+    level: int = DEFAULT_DWT_LEVEL,
+) -> dict[str, np.ndarray]:
+    """A/D 계수를 개별 역변환해 원신호 길이의 DWT 대역 신호로 반환한다."""
+    values = _validate_signal(signal)
+    wavelet_obj = pywt.Wavelet(wavelet)
+    max_level = pywt.dwt_max_level(values.size, wavelet_obj.dec_len)
+    if level <= 0 or level > max_level:
+        raise ValueError(
+            f"[오류] DWT level은 1~{max_level} 범위여야 합니다: {level}"
+        )
+
+    coefficients = pywt.wavedec(
+        values,
+        wavelet_obj,
+        level=level,
+        mode="symmetric",
+    )
+    band_names = [f"A{level}", *[f"D{i}" for i in range(level, 0, -1)]]
+    reconstructed: dict[str, np.ndarray] = {}
+    for target_index, band_name in enumerate(band_names):
+        isolated = [
+            coeff if index == target_index else np.zeros_like(coeff)
+            for index, coeff in enumerate(coefficients)
+        ]
+        component = pywt.waverec(
+            isolated,
+            wavelet_obj,
+            mode="symmetric",
+        )
+        reconstructed[band_name] = np.asarray(component[: values.size])
+    return reconstructed
+
+
+def compute_global_wavelet_spectrum(
+    signal: np.ndarray,
+    fs: float,
+    wavelet: str = DEFAULT_CWT_WAVELET,
+    min_frequency_hz: float = 1.0,
+    max_frequency_hz: float | None = None,
+    frequency_bins: int = 160,
+) -> tuple[np.ndarray, np.ndarray]:
+    """CWT 파워를 시간축으로 평균해 주파수별 Global Wavelet Spectrum을 계산한다."""
+    values = _validate_signal(signal)
+    if fs <= 0:
+        raise ValueError("[오류] 샘플링 주파수(fs)는 0보다 커야 합니다.")
+    if frequency_bins < 2:
+        raise ValueError("[오류] frequency_bins는 2 이상이어야 합니다.")
+
+    nyquist = fs / 2.0
+    lower = max(float(min_frequency_hz), np.finfo(float).eps)
+    upper = min(max_frequency_hz or nyquist, nyquist)
+    if upper <= lower:
+        raise ValueError("[오류] 최대 주파수는 최소 주파수보다 커야 합니다.")
+
+    target_frequencies = np.geomspace(lower, upper, frequency_bins)
+    scales = pywt.central_frequency(wavelet) * fs / target_frequencies
+    coefficients, frequencies = pywt.cwt(
+        values,
+        scales,
+        wavelet,
+        sampling_period=1.0 / fs,
+    )
+    mean_power = np.mean(np.square(np.abs(coefficients)), axis=1)
+    return np.asarray(frequencies), np.asarray(mean_power)
+
+
 def save_wavelet_energy_plot(
     signal: np.ndarray,
     fs: float,
